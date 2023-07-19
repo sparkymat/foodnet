@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  caddy:
+    image: caddy:2.7-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+  auth:
+    image: quay.io/keycloak/keycloak:21.1.2
+    restart: unless-stopped
+    ports:
+      - "4000:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      KC_HOSTNAME: auth.local
+      KC_PROXY: edge
+    command: start-dev
